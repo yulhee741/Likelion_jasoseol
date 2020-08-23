@@ -2,11 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import JasoseolForm
 from .models import Jasoseol
 from django.http import Http404
+from django.core.paginator import Paginator
 
 def index(request):
     myjss = Jasoseol.objects.all()
-
-    return render(request, 'index.html',{'myjss':myjss})
+    paginator = Paginator(myjss, 5)
+    page = request.GET.get('page')
+    jss_page = paginator.get_page(page)
+    return render(request, 'index.html', {'myjss':jss_page})
 
 
 def create(request):
